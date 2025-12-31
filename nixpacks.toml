@@ -1,0 +1,22 @@
+# Nixpacks configuration for Railway
+# Railway will use this configuration to build the .NET app from the backend/ folder
+# This overrides Railway's auto-detection which would fail because .csproj is in backend/
+
+[providers]
+detectors = ["dotnet"]
+
+[phases.setup]
+nixPkgs = { csharp = "8.0" }
+
+[phases.install]
+cmds = [
+  "cd backend && dotnet restore Backend.csproj"
+]
+
+[phases.build]
+cmds = [
+  "cd backend && dotnet publish Backend.csproj -c Release -o /app/publish"
+]
+
+[start]
+cmd = "dotnet /app/publish/Backend.dll"
